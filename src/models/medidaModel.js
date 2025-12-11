@@ -1,6 +1,6 @@
 var database = require("../database/config");
 
-function buscarUltimasMedidas(id, limite_linhas) {
+function buscarLuminosidade(id, limite_linhas) {
 
     var instrucaoSql = `SELECT 
         dht11_temperatura as temperatura, 
@@ -8,21 +8,35 @@ function buscarUltimasMedidas(id, limite_linhas) {
                         momento,
                         DATE_FORMAT(momento,'%H:%i:%s') as momento_grafico
                     FROM medida
-                    WHERE fk_aquario = ${idAquario}
+                    WHERE fk_aquario = ${id}
                     ORDER BY id DESC LIMIT ${limite_linhas}`;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
     return database.executar(instrucaoSql);
 }
 
-function buscarMedidasEmTempoReal(idAquario) {
+function buscarTemperatura(id) {
 
     var instrucaoSql = `SELECT 
         dht11_temperatura as temperatura, 
         dht11_umidade as umidade,
                         DATE_FORMAT(momento,'%H:%i:%s') as momento_grafico, 
                         fk_aquario 
-                        FROM medida WHERE fk_aquario = ${idAquario} 
+                        FROM medida WHERE fk_aquario = ${id} 
+                    ORDER BY id DESC LIMIT 1`;
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql);
+    return database.executar(instrucaoSql);
+}
+
+function buscarUmidade(id) {
+
+    var instrucaoSql = `SELECT 
+        dht11_temperatura as temperatura, 
+        dht11_umidade as umidade,
+                        DATE_FORMAT(momento,'%H:%i:%s') as momento_grafico, 
+                        fk_aquario 
+                        FROM medida WHERE fk_aquario = ${id} 
                     ORDER BY id DESC LIMIT 1`;
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
@@ -30,6 +44,7 @@ function buscarMedidasEmTempoReal(idAquario) {
 }
 
 module.exports = {
-    buscarUltimasMedidas,
-    buscarMedidasEmTempoReal
+    buscarLuminosidade,
+    buscarTemperatura,
+    buscarUmidade
 }

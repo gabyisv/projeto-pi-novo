@@ -23,58 +23,59 @@
     var graficoLinha
 
     function obterDados() {
-        // KPI de média
-        fetch("/dashboard/medias")
+
+        fetch("/dashboard/luxBuscar")
             .then(function(r) { return r.json(); })
             .then(function(dados) {
                 if(dados.length > 0){
-                    AtualizarKpiMedia(dados);
+                    plotarGraficoLuminosidade(dados);
+                    AtualizarKpiLuminosidade(dados);
                 }
             });
 
-        // Gráfico de linha
-        plotarGraficoLinha();
-
-        // Gráfico de classes
-        fetch("/dashboard/classes")
+        fetch("/dashboard/temperaturaBuscar")
             .then(function(r) { return r.json(); })
             .then(function(dados) {
                 if(dados.length > 0){
-                    plotarGraficoBarrasClasse(dados);
-                    AtualizarKpiClasse(dados);
+                    plotarGraficoTemperatura(dados);
+                    AtualizarKpiTemp(dados);
                 }
             });
 
-        // Gráfico de personagens
-        fetch("/dashboard/personagens")
+        fetch("/dashboard/umidadeBuscar")
             .then(function(r) { return r.json(); })
             .then(function(dados) {
                 if(dados.length > 0){
-                    plotarGraficoBarrasPersonagem(dados);
-                    AtualizarKpiPersonagem(dados);
+                    plotarGraficoUmidade(dados);
+                    AtualizarKpiUmidade(dados);
                 }
             });
     }
     
     
-    function plotarGraficoLinha() {
-        fetch("/dashboard/tentativas")
+    function plotarGraficoTemperatura() {
+        fetch("/dashboard/temperaturaBuscar")
             .then(function(r) { return r.json(); })
             .then(function(dados) {
                 var labels = [];
-                var valores = [dadosAleatorios];
+                var valores = [];
                 
                 for (var i = 0; i < dados.length; i++) {
-                    var dadosAleatorios = Math.floor(Math.random()*24+12); console.log(fk_sensor)
                     labels.push("");
-                    valores.push(Number(dados[i].pontuacao));
+                    valores.push(Number(dados[i].temperatura));
                 }
 
                 var ctx = document.getElementById('linha').getContext('2d');
 
-                if (graficoLinha) {
-                    graficoLinha.destroy();
-                }
+             // if da temperatura
+            if(dados < 18){
+                alert(`A temperatura está abaixo do ideal`)
+            } else if(dados > 22){
+                alert(`A temperatura está acima do ideal`)
+            }else {
+                alert(`Temperatura ideal`)
+            }
+
 
                 graficoLinha = new Chart(ctx, {
                     type: 'line',
@@ -100,56 +101,119 @@
                     }
                 });
             });
+
     }
 
     // Funções KPI e gráficos de barras (mantém iguais)
-    function plotarGraficoBarrasClasse(dados) {
-        var labels = [];
-        var valores = [];
-        for(var i = 0; i < dados.length; i++){
-            labels.push(dados[i].classe);
-            valores.push(Number(dados[i].quantidade));
-        }
+     function plotarGraficoLuminosidade() {
+        fetch("/dashboard/luxBuscar")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                var labels = [];
+                var valores = [];
+                
+                for (var i = 0; i < dados.length; i++) {
+                    labels.push("");
+                    valores.push(Number(dados[i].luminosidade));
+                }
 
-        var ctx = document.getElementById('bar').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: { labels: labels, datasets: [{ label: "Quantidade de usuários por classe", data: valores, backgroundColor: '#452816', borderColor: '#452816', borderWidth: 1 }] },
-            options: { responsive: true, scales: { y: { beginAtZero: true } } }
-        });
+                var ctx = document.getElementById('linha').getContext('2d');
+
+            // if do lux
+            if(dados > 0 && dados <= 50){
+                alert(`Porcentagem de risco de luminosidade = 25%`)
+            } else if(dados <= 100){
+                alert(`Porcentagem de risco de luminosidade = 50%`)
+            }else if(dados <= 150){
+                alert(`Porcentagem de risco de luminosidade = 75%`)
+            }else if(dados <= 200){
+                alert(`Porcentagem de risco de luminosidade = 100%`)
+            }else{
+                alert(`Sua pintura está em risco por conta da luminosidade`)
+            }
+
+                graficoLinha = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Acertos por tentativa",
+                            data: valores,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    }
+                });
+            });
+
+    }
+    
+
+   function plotarGraficoUmidade() {
+        fetch("/dashboard/umidadeBuscar")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                var labels = [];
+                var valores = [];
+                
+                for (var i = 0; i < dados.length; i++) {
+                    labels.push("");
+                    valores.push(Number(dados[i].umidade));
+                }
+
+                var ctx = document.getElementById('linha').getContext('2d');
+
+             // if da temperatura
+            if(dados < 18){
+                alert(`A temperatura está abaixo do ideal`)
+            } else if(dados > 22){
+                alert(`A temperatura está acima do ideal`)
+            }else {
+                alert(`Temperatura ideal`)
+            }
+
+
+                graficoLinha = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Acertos por tentativa",
+                            data: valores,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    }
+                });
+            });
+
     }
 
-    function plotarGraficoBarrasPersonagem(dados) {
-        var labels = [];
-        var valores = [];
-        for(var i=0; i<dados.length; i++){
-            labels.push(dados[i].personagem);
-            valores.push(Number(dados[i].quantidade));
-        }
-
-        var ctx = document.getElementById('bar2').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: { labels: labels, datasets: [{ label: "Quantidade de escolhas por personagem", data: valores, backgroundColor: [
-                '#191970',
-                '#228b22',
-                '#daa520',
-                '#b22222'
-            ], borderColor: [
-                '#191970',
-                '#228b22',
-                '#daa520',
-                '#b22222'
-            ], borderWidth: 1 }] },
-            options: { responsive: true, scales: { y: { beginAtZero: true } } }
-        });
-    }
-
-    function AtualizarKpiMedia(dados){
-        var totalQuestoes = 10;
-        var media = Number(dados[0].media);
-        var porcentagem = (media / totalQuestoes) * 100;
-        document.getElementById('media_KPI').innerHTML = porcentagem.toFixed(0) + "%";
+    function AtualizarKpiLuminosidade(dados){
+        
+        document.getElementById('KPI_Luminosidade').innerHTML;
     }
 
     function AtualizarKpiPersonagem(dados){

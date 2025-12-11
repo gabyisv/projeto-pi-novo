@@ -3,12 +3,16 @@ var router = express.Router();
 
 var medidaController = require("../controllers/medidaController");
 
-router.get("/ultimas/:id", function (req, res) {
-    medidaController.buscarUltimasMedidas(req, res);
+router.get("/luxBuscar/:id", function (req, res) {
+    medidaController.buscarLuminosidade(req, res);
 });
 
-router.get("/tempo-real/:id", function (req, res) {
-    medidaController.buscarMedidasEmTempoReal(req, res);
+router.get("/temperaturaBuscar/:id", function (req, res) {
+    medidaController.buscarTemperatura(req, res);
+})
+
+router.get("/umidadeBuscar/:id", function (req, res) {
+    medidaController.buscarUmidade(req, res);
 })
 
 module.exports = router;

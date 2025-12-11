@@ -1,6 +1,6 @@
 var medidaModel = require("../models/medidaModel");
 
-function buscarUltimasMedidas(req, res) {
+function buscarLuminosidade(req, res) {
 
     const limite_linhas = 10;
 
@@ -8,7 +8,7 @@ function buscarUltimasMedidas(req, res) {
 
     console.log(`Recuperando as ultimas ${limite_linhas} medidas`);
 
-    medidaModel.buscarUltimasMedidas(id, limite_linhas).then(function (resultado) {
+    medidaModel.buscarLuminosidade(id, limite_linhas).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -22,13 +22,32 @@ function buscarUltimasMedidas(req, res) {
 }
 
 
-function buscarMedidasEmTempoReal(req, res) {
+function buscarTemperatura(req, res) {
 
     var id = req.params.id;
 
     console.log(`Recuperando medidas em tempo real`);
 
-    medidaModel.buscarMedidasEmTempoReal(id).then(function (resultado) {
+    medidaModel.buscarTemperatura(id).then(function (resultado) {
+        if (resultado.length > 0) {
+            res.status(200).json(resultado);
+        } else {
+            res.status(204).send("Nenhum resultado encontrado!")
+        }
+    }).catch(function (erro) {
+        console.log(erro);
+        console.log("Houve um erro ao buscar as ultimas medidas.", erro.sqlMessage);
+        res.status(500).json(erro.sqlMessage);
+    });
+}
+
+    function buscarUmidade(req, res) {
+
+    var id = req.params.id;
+
+    console.log(`Recuperando medidas em tempo real`);
+
+    medidaModel.buscarUmidade(id).then(function (resultado) {
         if (resultado.length > 0) {
             res.status(200).json(resultado);
         } else {
@@ -42,7 +61,7 @@ function buscarMedidasEmTempoReal(req, res) {
 }
 
 module.exports = {
-    buscarUltimasMedidas,
-    buscarMedidasEmTempoReal
-
+    buscarLuminosidade,
+    buscarTemperatura,
+    buscarUmidade,
 }
