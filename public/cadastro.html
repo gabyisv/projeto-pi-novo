@@ -72,6 +72,28 @@
   // Array para armazenar empresas cadastradas para validação de código de ativação 
   let listaEmpresasCadastradas = [];
 
+  var caracteresEspeciais = [
+  "!", "@", "#", "$", "%", "¨", "&", "*", "(", ")", "-", "_", "=", "+",
+  "[", "]", "{", "}", "\\", "|", ";", ":", "'", '"', ",", ".", "<", ">", "/", "?",
+  "`", "~", "^", "§"
+  ];
+
+  var letrasMinusculas = [
+  "a","b","c","d","e","f","g","h","i","j","k","l","m",
+  "n","o","p","q","r","s","t","u","v","w","x","y","z"
+  ];
+
+  var letrasMaiusculas = [
+  "A","B","C","D","E","F","G","H","I","J","K","L","M",
+  "N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
+  ];
+
+  var numeros = [
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"
+  ];
+
+
+
   function cadastrar() {
     // aguardar();
 
@@ -84,7 +106,9 @@
     var codigoVar = codigo_input.value;
     var idEmpresaVincular
 
+    
     // Verificando se há algum campo em branco
+
     if (
       nomeVar == "" ||
       emailVar == "" ||
@@ -92,13 +116,61 @@
       confirmacaoSenhaVar == "" ||
       codigoVar == ""
     ) {
+      
       cardErro.style.display = "block";
-      mensagem_erro.innerHTML =
-        "(Mensagem de erro para todos os campos em branco)";
+      mensagem_erro.innerHTML = "(Mensagem de erro para todos os campos em branco)";
 
+      return;
+      
+      // Verificação de senha
+
+    } else if (senhaVar.length < 8) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = `
+      Sua senha deve conter ao menos 8 caracteres!
+      `;
+
+      return;
+
+    } else if (senhaVar.includes(caracteresEspeciais) == false) {
+
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = `
+      Sua senha deve conter ao menos um caractere especial!
+      `;
+
+      return;
+
+    } else if (senhaVar.inlcudes(numeros) == false) {
+
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = `
+      Sua senha deve conter ao menos um número!
+      `;
+
+      return;
+
+    } else if (senhaVar.includes(letrasMaiusculas) == false) {
+      
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = `
+      Sua senha deve conter ao menos uma letra maiúscula!
+      `;
+
+      return;
+    
+    } else if (senhaVar.includes(letrasMinusculas) == false) {
+      
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = `
+      Sua senha deve conter ao menos uma letra minúscula!
+      `;
+
+      return;
+    
+    } else {
       finalizarAguardar();
       return false;
-    } else {
       setInterval(sumirMensagem, 5000);
     }
 
