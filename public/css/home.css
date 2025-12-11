@@ -49,16 +49,6 @@ body {
   color: #e3b062;
 }
 
-.titulo {
-  color: #32b9cd;
-  width: fit-content;
-  font-weight: 500;
-}
-
-.header h1 {
-  margin: 0;
-}
-
 /* BANNER */
 
 .banner img{
