@@ -15,6 +15,107 @@
 
 <body onload="obterDados()" >
 
+    <div class="dash">
+            <div class="btns-dash" id="btna">
+                Gráfico de luminosidade
+            <div>
+            <canvas id="luminosidade_grafico"></canvas>
+            </div>
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
+    <div class="dash">    
+            <div class="btns-dash" id="btnAquario">
+                Grafico de temperatura
+                 <canvas id="temperatura_grafico"></canvas>
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="dash">   
+            <div class="btns-dash" id="btnAquario">
+                Grafico de umidade
+                <canvas id="umidade_grafico"></canvas>
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
+     <div class="dash"> 
+            <div class="btns-dash" id="btnAquario">
+                 <div id="KPI_TEMP_MAX">
+                 </div>
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
+    <div class="dash">
+            <div class="btns-dash" id="btnAquario">
+                 <div id="KPI_TEMP_MIN">
+                 </div>
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
+    <div class="dash">
+     
+
+            <div class="btns-dash" id="btnAquario">
+                 <div id="KPI_UMID_MAX">
+                 </div>
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
+    <div class="dash">
+
+            <div class="btns-dash" id="btnAquario">
+             
+                 <div id="KPI_UMID_MIN">
+                 </div>
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
+    <div class="dash">
+
+            <div class="btns-dash" id="btnAquario">
+              
+                 <div id="KPI_LUM_MAX">
+                 </div>
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
+    <div class="dash">
+
+            <div class="btns-dash" id="btnAquario">
+        
+                 <div id="KPI_LUM_MIN">
+                 </div>
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
 
@@ -65,7 +166,7 @@
                     valores.push(Number(dados[i].dht11_temperatura));
                 }
 
-                var ctx = document.getElementById('linha').getContext('2d');
+                var ctx = document.getElementById('temperatura_grafico').getContext('2d');
 
              // if da temperatura
             if(dados < 18){
@@ -117,7 +218,7 @@
                     valores.push(Number(dados[i].luminosidade));
                 }
 
-                var ctx = document.getElementById('linha').getContext('2d');
+                var ctx = document.getElementById('luminosidade_grafico').getContext('2d');
 
             // if do lux
             if(dados > 0 && dados <= 50){
@@ -172,7 +273,7 @@
                     valores.push(Number(dados[i].dht11_umidade));
                 }
 
-                var ctx = document.getElementById('linha').getContext('2d');
+                var ctx = document.getElementById('umidade_grafico').getContext('2d');
 
              // if da temperatura
             if(dados < 18){
@@ -211,18 +312,31 @@
 
     }
 
-    function AtualizarKpiTemp(dados){
-        var div = document.getElementById('Temperatura C/' /*Top 1 Personagem */);
+    function AtualizarKpiTempMax(dados){
+        var div = document.getElementById('KPI_TEMP_MAX');
         div.innerHTML = `<h2> ${dados[0].dht11_temperatura} </h2>`;
     }
 
-    function AtualizarKpiUmidade(dados){
-        var div = document.getElementById('Umidade C/' /*Top 1 Classe */);
+    function AtualizarKpiTempMin(dados){
+        var div = document.getElementById('KPI_TEMP_MIN');
+        div.innerHTML = `<h2> ${dados[0].dht11_temperatura} </h2>`;
+    }
+
+    function AtualizarKpiUmidadeMax(dados){
+        var div = document.getElementById('KPI_UMID_MAX');
+        div.innerHTML = "<h2>" + dados[0].dht11_umidade + "</h2>";
+    }
+    function AtualizarKpiUmidadeMin(dados){
+        var div = document.getElementById('KPI_UMID_MIN');
         div.innerHTML = "<h2>" + dados[0].dht11_umidade + "</h2>";
     }
 
-    function AtualizarKpiLuminosidade(dados){
-        var div = document.getElementById('Luminosidade C/' /*Top 1 Classe */);
+    function AtualizarKpiLuminosidadeMax(dados){
+        var div = document.getElementById('KPI_LUM_MAX');
+        div.innerHTML = "<h2>" + dados[0].luminosidade + "</h2>";
+    }
+    function AtualizarKpiLuminosidadeMax(dados){
+        var div = document.getElementById('KPI_LUM_MIN');
         div.innerHTML = "<h2>" + dados[0].luminosidade + "</h2>";
     }
 </script>
