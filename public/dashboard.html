@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="shortcut icon" href="../assets/icon/favicon2.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IluminiArt | Dashboards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./../css/dashboards.css">
+    <link rel="stylesheet" href="./../css/estilo.css" />
+    <script src="../js/sessao.js"></script>
+    <script src="./../js/alerta.js"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <!-- scripts do Chart.js - 2022-1 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!--FONT AWESOME-->
+    <script src="https://kit.fontawesome.com/9f7414eb10.js" crossorigin="anonymous"></script>
+</head>
+
+<!-- <body onload=" atualizarFeed()"> -->
+
+<body>
+
+    <div class="janela">
+        <div class="header-left">
+            <h1>IluminiArt</h1>
+
+            <div class="hello">
+                <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
+            </div>
+
+            <div class="btn-nav-white">
+                <a href="./cards.html">
+                    <h3>Quadros</h3>
+                </a>
+            </div>
+
+            <div class="btn-nav">
+
+                <h3>Gráficos</h3>
+
+            </div>
+
+            <div class="btn-logout" onclick="limparSessao()">
+                <h3>Sair</h3>
+            </div>
+
+        </div>
+
+        <div class="dash">
+            <div id="alerta">
+            </div>
+
+            <div class="btns-dash" id="btnAquario">
+                <!-- O gráfico é chamado de acordo com o id (fk_aquario) do banco  -->
+            </div>
+            <div id="graficos">
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+
+<script>
+    
+    var graficoLinha
+
+    function obterDados() {
+
+        fetch("/dashboard/luxBuscar")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                if(dados.length > 0){
+                    plotarGraficoLuminosidade(dados);
+                    AtualizarKpiLuminosidade(dados);
+                }
+            });
+
+        fetch("/dashboard/temperaturaBuscar")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                if(dados.length > 0){
+                    plotarGraficoTemperatura(dados);
+                    AtualizarKpiTemp(dados);
+                }
+            });
+
+        fetch("/dashboard/umidadeBuscar")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                if(dados.length > 0){
+                    plotarGraficoUmidade(dados);
+                    AtualizarKpiUmidade(dados);
+                }
+            });
+    }
+    
+    
+    function plotarGraficoTemperatura() {
+        fetch("/dashboard/temperaturaBuscar")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                var labels = [];
+                var valores = [];
+                
+                for (var i = 0; i < dados.length; i++) {
+                    labels.push(dados[i].horarioMedida);
+                    valores.push(Number(dados[i].dht11_temperatura));
+                }
+
+                var ctx = document.getElementById('linha').getContext('2d');
+
+             // if da temperatura
+            if(dados < 18){
+                alert(`A temperatura está abaixo do ideal`)
+            } else if(dados > 22){
+                alert(`A temperatura está acima do ideal`)
+            }else {
+                alert(`Temperatura ideal`)
+            }
+
+
+                graficoLinha = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Grafico de Temperatura",
+                            data: valores,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    }
+                });
+            });
+
+    }
+
+    // Funções KPI e gráficos de barras (mantém iguais)
+     function plotarGraficoLuminosidade() {
+        fetch("/dashboard/luxBuscar")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                var labels = [];
+                var valores = [];
+                
+                for (var i = 0; i < dados.length; i++) {
+                    labels.push(dados[i].horarioMedida);
+                    valores.push(Number(dados[i].luminosidade));
+                }
+
+                var ctx = document.getElementById('linha').getContext('2d');
+
+            // if do lux
+            if(dados > 0 && dados <= 50){
+                alert(`Porcentagem de risco de luminosidade = 25%`)
+            } else if(dados <= 100){
+                alert(`Porcentagem de risco de luminosidade = 50%`)
+            }else if(dados <= 150){
+                alert(`Porcentagem de risco de luminosidade = 75%`)
+            }else if(dados <= 200){
+                alert(`Porcentagem de risco de luminosidade = 100%`)
+            }else{
+                alert(`Sua pintura está em risco por conta da luminosidade`)
+            }
+
+                graficoLinha = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Grafico de Luminosidade",
+                            data: valores,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    }
+                });
+            });
+
+    }
+    
+
+   function plotarGraficoUmidade() {
+        fetch("/dashboard/umidadeBuscar")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                var labels = [];
+                var valores = [];
+                
+                for (var i = 0; i < dados.length; i++) {
+                    labels.push(dados[i].horarioMedida);
+                    valores.push(Number(dados[i].dht11_umidade));
+                }
+
+                var ctx = document.getElementById('linha').getContext('2d');
+
+             // if da temperatura
+            if(dados < 18){
+                alert(`A temperatura está abaixo do ideal`)
+            } else if(dados > 22){
+                alert(`A temperatura está acima do ideal`)
+            }else {
+                alert(`Temperatura ideal`)
+            }
+
+
+                graficoLinha = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Grafico de Umidade",
+                            data: valores,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    }
+                });
+            });
+
+    }
+
+    function AtualizarKpiTemp(dados){
+        var div = document.getElementById('Temperatura C/' /*Top 1 Personagem */);
+        div.innerHTML = `<h2> ${dados[0].dht11_temperatura} </h2>`;
+    }
+
+    function AtualizarKpiUmidade(dados){
+        var div = document.getElementById('Umidade C/' /*Top 1 Classe */);
+        div.innerHTML = "<h2>" + dados[0].dht11_umidade + "</h2>";
+    }
+
+    function AtualizarKpiLuminosidade(dados){
+        var div = document.getElementById('Luminosidade C/' /*Top 1 Classe */);
+        div.innerHTML = "<h2>" + dados[0].luminosidade + "</h2>";
+    }
+</script>
