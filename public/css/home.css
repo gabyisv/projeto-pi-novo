@@ -1,0 +1,207 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Barlow', 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: rgb(255, 255, 255);
+}
+
+:root {
+  --tamanho-header: 80px;
+  --tamanho-banner: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
+  --tamanho-simulador: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
+  --tamanho-login: calc(100vh - var(--tamanho-header) - var(--tamanho-footer) - 2px);
+  --tamanho-footer: 65px;
+}
+
+.container {
+  display: flex;
+  width: 80%;
+  margin: auto;
+}
+
+.header {
+  height: var(--tamanho-header);
+  border-bottom: 2px solid #32b9cd;
+}
+
+.header .container {
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.header a {
+  text-decoration: none;
+  color: #e3b062;
+}
+
+.agora {
+  font-weight: 800;
+}
+
+.navbar {
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  color: #e3b062;
+}
+
+.titulo {
+  color: #32b9cd;
+  width: fit-content;
+  font-weight: 500;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+/* BANNER */
+
+.banner img{
+  color: white;
+  position: relative;
+  z-index: 1;
+    height: 600px;
+  width: 100%;
+  box-shadow: rgba(87, 52, 20, 0.24) 0px 8px 8px;
+}
+
+.banner-container {
+    background: linear-gradient(to right, 
+    rgba(52, 34, 19, 0.277), 
+    rgba(61, 33, 14, 0.663),
+    rgba(41, 18, 2, 0.782)
+  );
+    position: absolute;
+    height: 602px;
+    width: 100%;
+    left: 0;
+    top: 0;
+    margin-top: 80px;
+    opacity: 62%;
+    z-index: 2;
+}
+
+
+.container-texto {
+    position: absolute;
+    z-index: 3;
+    color: #ffff;
+    top: 40%;
+    left: 0;
+    margin-left: 60px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.botao-header {
+     width: 245px;
+     border-radius: 16px;
+     border: none;
+     padding: 8px;
+     background-color: #ffffff;
+     color: rgb(61, 38, 8);
+     font-size: 16px;
+     font-weight: 600;
+}
+
+/* MISSÃO VISÃO VALORES */
+
+.secao-cards {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+}
+
+.secao-cards h2 {
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: rgba(87, 52, 20, 0.607)0px 4px 8px;
+    color: #543403;
+
+}
+.container-cards {
+    display: flex;
+gap: 30px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.card img {
+    width: 400px;
+    height: 300px;
+    border-radius: 14px;
+    box-shadow: rgba(87, 52, 20, 0.607)0px 4px 8px;;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+
+.card p {
+    text-align: justify;
+    margin: 40px;
+}
+
+.container-card-texto {
+    display: flex;
+    align-items: center;
+    margin: 0 200px 40px;
+}
+
+.container-card-texto img {
+    width: 500px;
+    box-shadow: rgba(87, 52, 20, 0.607)0px 4px 8px;
+}
+
+.container-textos{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: justify;
+    margin-left: 30px;
+}
+
+.container-textos h3 {
+    text-align: center;
+    color: #8b5a10;
+}
+
+.container-textos b {
+    color: #8b5a10;
+}
+
+.card b {
+    color: #8b5a10;
+}
+.container-card-impacto {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+/* FOOTER */
+
+.footer {
+  background-color: #32b9cd;
+  height: 150px;
+  color: #fff;
+  display: flex;
+  font-size: 15px;
+}
+
+.footer .container {
+  justify-content: center;
+  text-align: center;
+}
+
+.footer .container .version {
+  font-size: 12px;
+}
