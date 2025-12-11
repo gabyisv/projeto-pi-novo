@@ -61,8 +61,8 @@
                 var valores = [];
                 
                 for (var i = 0; i < dados.length; i++) {
-                    labels.push("");
-                    valores.push(Number(dados[i].temperatura));
+                    labels.push(dados[i].horarioMedida);
+                    valores.push(Number(dados[i].dht11_temperatura));
                 }
 
                 var ctx = document.getElementById('linha').getContext('2d');
@@ -82,7 +82,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: "Acertos por tentativa",
+                            label: "Grafico de Temperatura",
                             data: valores,
                             borderColor: 'rgb(75, 192, 192)',
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -113,7 +113,7 @@
                 var valores = [];
                 
                 for (var i = 0; i < dados.length; i++) {
-                    labels.push("");
+                    labels.push(dados[i].horarioMedida);
                     valores.push(Number(dados[i].luminosidade));
                 }
 
@@ -137,7 +137,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: "Acertos por tentativa",
+                            label: "Grafico de Luminosidade",
                             data: valores,
                             borderColor: 'rgb(75, 192, 192)',
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -168,8 +168,8 @@
                 var valores = [];
                 
                 for (var i = 0; i < dados.length; i++) {
-                    labels.push("");
-                    valores.push(Number(dados[i].umidade));
+                    labels.push(dados[i].horarioMedida);
+                    valores.push(Number(dados[i].dht11_umidade));
                 }
 
                 var ctx = document.getElementById('linha').getContext('2d');
@@ -189,7 +189,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: "Acertos por tentativa",
+                            label: "Grafico de Umidade",
                             data: valores,
                             borderColor: 'rgb(75, 192, 192)',
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -211,28 +211,19 @@
 
     }
 
-    function AtualizarKpiLuminosidade(dados){
-        
-        document.getElementById('KPI_Luminosidade').innerHTML;
+    function AtualizarKpiTemp(dados){
+        var div = document.getElementById('Temperatura C/' /*Top 1 Personagem */);
+        div.innerHTML = `<h2> ${dados[0].dht11_temperatura} </h2>`;
     }
 
-    function AtualizarKpiPersonagem(dados){
-        var div = document.getElementById('top1Personagem');
-        var personagem = dados[0].personagem;
-        div.innerHTML = "";
-
-        var img = "";
-        if(personagem == "Gon_Freecss") img = "assets/imgs/Gon.jpg";
-        else if(personagem == "Killua_Zoldyck") img = "assets/imgs/Killua.jpg";
-        else if(personagem == "Leorio") img = "assets/imgs/Leorio.jpg";
-        else if(personagem == "Kurapika") img = "assets/imgs/Kurapika.jfif";
-
-        div.innerHTML = '<img src="' + img + '" width="200">';
-    }
-
-    function AtualizarKpiClasse(dados){
+    function AtualizarKpiUmidade(dados){
         var div = document.getElementById('top1Classe');
-        div.innerHTML = "<h2>" + dados[0].classe + "</h2>";
+        div.innerHTML = "<h2>" + dados[0].dht11_umidade + "</h2>";
+    }
+
+    function AtualizarKpiLuminosidade(dados){
+        var div = document.getElementById('top1Classe');
+        div.innerHTML = "<h2>" + dados[0].luminosidade + "</h2>";
     }
 </script>
 
