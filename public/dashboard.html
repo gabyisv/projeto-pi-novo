@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="shortcut icon" href="/assets/icon/Pinguim_do_ep.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Iluminart | Usuario </title>
+
+    <script src="../js/sessao.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body onload="obterDados()" >
+
+</body>
+</html>
+
+<script>
+    
+    var graficoLinha
+
+    function obterDados() {
+        // KPI de média
+        fetch("/dashboard/medias")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                if(dados.length > 0){
+                    AtualizarKpiMedia(dados);
+                }
+            });
+
+        // Gráfico de linha
+        plotarGraficoLinha();
+
+        // Gráfico de classes
+        fetch("/dashboard/classes")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                if(dados.length > 0){
+                    plotarGraficoBarrasClasse(dados);
+                    AtualizarKpiClasse(dados);
+                }
+            });
+
+        // Gráfico de personagens
+        fetch("/dashboard/personagens")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                if(dados.length > 0){
+                    plotarGraficoBarrasPersonagem(dados);
+                    AtualizarKpiPersonagem(dados);
+                }
+            });
+    }
+    
+    
+    function plotarGraficoLinha() {
+        fetch("/dashboard/tentativas")
+            .then(function(r) { return r.json(); })
+            .then(function(dados) {
+                var labels = [];
+                var valores = [dadosAleatorios];
+                
+                for (var i = 0; i < dados.length; i++) {
+                    var dadosAleatorios = Math.floor(Math.random()*24+12); console.log(fk_sensor)
+                    labels.push("");
+                    valores.push(Number(dados[i].pontuacao));
+                }
+
+                var ctx = document.getElementById('linha').getContext('2d');
+
+                if (graficoLinha) {
+                    graficoLinha.destroy();
+                }
+
+                graficoLinha = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Acertos por tentativa",
+                            data: valores,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    }
+                });
+            });
+    }
+
+    // Funções KPI e gráficos de barras (mantém iguais)
+    function plotarGraficoBarrasClasse(dados) {
+        var labels = [];
+        var valores = [];
+        for(var i = 0; i < dados.length; i++){
+            labels.push(dados[i].classe);
+            valores.push(Number(dados[i].quantidade));
+        }
+
+        var ctx = document.getElementById('bar').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: { labels: labels, datasets: [{ label: "Quantidade de usuários por classe", data: valores, backgroundColor: '#452816', borderColor: '#452816', borderWidth: 1 }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+    }
+
+    function plotarGraficoBarrasPersonagem(dados) {
+        var labels = [];
+        var valores = [];
+        for(var i=0; i<dados.length; i++){
+            labels.push(dados[i].personagem);
+            valores.push(Number(dados[i].quantidade));
+        }
+
+        var ctx = document.getElementById('bar2').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: { labels: labels, datasets: [{ label: "Quantidade de escolhas por personagem", data: valores, backgroundColor: [
+                '#191970',
+                '#228b22',
+                '#daa520',
+                '#b22222'
+            ], borderColor: [
+                '#191970',
+                '#228b22',
+                '#daa520',
+                '#b22222'
+            ], borderWidth: 1 }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+    }
+
+    function AtualizarKpiMedia(dados){
+        var totalQuestoes = 10;
+        var media = Number(dados[0].media);
+        var porcentagem = (media / totalQuestoes) * 100;
+        document.getElementById('media_KPI').innerHTML = porcentagem.toFixed(0) + "%";
+    }
+
+    function AtualizarKpiPersonagem(dados){
+        var div = document.getElementById('top1Personagem');
+        var personagem = dados[0].personagem;
+        div.innerHTML = "";
+
+        var img = "";
+        if(personagem == "Gon_Freecss") img = "assets/imgs/Gon.jpg";
+        else if(personagem == "Killua_Zoldyck") img = "assets/imgs/Killua.jpg";
+        else if(personagem == "Leorio") img = "assets/imgs/Leorio.jpg";
+        else if(personagem == "Kurapika") img = "assets/imgs/Kurapika.jfif";
+
+        div.innerHTML = '<img src="' + img + '" width="200">';
+    }
+
+    function AtualizarKpiClasse(dados){
+        var div = document.getElementById('top1Classe');
+        div.innerHTML = "<h2>" + dados[0].classe + "</h2>";
+    }
+</script>
+
+
